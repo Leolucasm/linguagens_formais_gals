@@ -7,25 +7,24 @@ ParserName = Sintatico
 SemanticName = Semantico
 ScannerCaseSensitive = true
 ScannerTable = Full
-Input = String
+Input = Stream
 Parser = SLR
 #RegularDefinitions
 ignorar: [2-9\n\t\r\s]+
-binario: [0,1]+
-variaveis: [a-zA-Z]+
-sho: show
+binario: [01]+
+variaveis: [A-Z]+
 #Tokens
 :{ignorar}
 BINARIO: {binario}
 SOMA: "+"
 SUB: "-"
 MULT: "*"
-DIV: "\"
+DIV: "/"
 EXP: "^"
 AP: "("
 FP: ")"
 VAR:{variaveis}
-SHOW: shoW
+SHOW: show
 FIM: ";"
 IGUAL:"="
 #NonTerminals
@@ -36,14 +35,13 @@ IGUAL:"="
 <E>
 <F>
 <G>
-
 #Grammar
-<A> ::= <A> SOMA <B> FIM  | <A> SUB <B> FIM | <B>;
-<B> ::= <B> MULT <C> FIM | <B> DIV <C> FIM | <C>;
-<C> ::= <C> EXP <D> FIM| <D>; 
-<D> ::= SHOW AP <D> FP FIM | <G> | <E> ;
-<E> ::= VAR IGUAL <F>;
-<F> ::= BINARIO | VAR;
-<G> ::= AP <A> FP FIM | BINARIO | VAR;
+<A> ::= <A> SOMA <B> | <A> SUB <B> | FIM | <B>;
+<B> ::= <B> MULT <C> | <B> DIV <C> | FIM | <C>;
+<C> ::= <C> EXP <D> | FIM | <D>; 
+<D> ::= SHOW AP <D> FP FIM | <E> | <G>;
+<E> ::= VAR IGUAL <F> FIM;
+<F> ::= BINARIO | VAR | <A> | <B> | <C>;
+<G> ::= AP <A> FP | BINARIO | VAR;
 
 
